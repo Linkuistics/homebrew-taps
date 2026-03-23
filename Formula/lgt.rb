@@ -1,7 +1,7 @@
 class Lgt < Formula
   desc "GUI testing tool for macOS VMs, designed for LLM-driven testing"
   homepage "https://github.com/linkuistics/lgt"
-  url "https://github.com/linkuistics/lgt.git", tag: "v0.4.0"
+  url "https://github.com/linkuistics/lgt.git", tag: "v0.5.0"
   license "MIT"
 
   depends_on xcode: ["15.0", :build]
