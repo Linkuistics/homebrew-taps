@@ -9,6 +9,12 @@ class Testanyware < Formula
   depends_on :macos
 
   def install
+    # RoyalVNCKit declares type: .dynamic, which produces a dylib that won't
+    # be present at runtime after Homebrew installs just the binary.
+    # Resolve deps first, then patch to use static linking.
+    system "swift", "package", "resolve", "--disable-sandbox"
+    inreplace ".build/checkouts/royalvnc/Package.swift", "type: .dynamic,\n", ""
+
     system "swift", "build", "-c", "release", "--disable-sandbox"
 
     bin.install ".build/release/testanyware"
