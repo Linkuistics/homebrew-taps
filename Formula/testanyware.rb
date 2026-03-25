@@ -1,7 +1,7 @@
 class Testanyware < Formula
   desc "GUI testing tool for VMs, using tart, designed for LLM-driven testing"
   homepage "https://github.com/linkuistics/testanyware"
-  url "https://github.com/linkuistics/testanyware.git", tag: "v0.7.0"
+  url "https://github.com/linkuistics/testanyware.git", tag: "v0.8.0"
   license "MIT"
 
   depends_on xcode: ["15.0", :build]
