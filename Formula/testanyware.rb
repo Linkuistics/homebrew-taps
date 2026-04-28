@@ -1,31 +1,25 @@
 class Testanyware < Formula
   desc "GUI testing tool for VMs, using tart, designed for LLM-driven testing"
-  homepage "https://github.com/linkuistics/testanyware"
-  url "https://github.com/linkuistics/testanyware.git", tag: "v0.11.0"
+  homepage "https://github.com/Linkuistics/TestAnyware"
+  version "1.0.0"
   license "MIT"
 
-  depends_on xcode: ["15.0", :build]
-  depends_on "jq"
   depends_on :macos
+  depends_on arch: :arm64
+
+  on_macos do
+    on_arm do
+      url "https://github.com/Linkuistics/TestAnyware/releases/download/v1.0.0/testanyware-v1.0.0-aarch64-apple-darwin.tar.xz"
+      sha256 "c69e5904dba4b6942584f7c7cf41498b4a57b3bb9b9533daebd52560152c4ffc"
+    end
+  end
 
   def install
-    # RoyalVNCKit declares type: .dynamic, which produces a dylib that won't
-    # be present at runtime after Homebrew installs just the binary.
-    # Resolve deps first, then patch to use static linking.
-    system "swift", "package", "resolve", "--disable-sandbox"
-    inreplace ".build/checkouts/royalvnc/Package.swift", "type: .dynamic,\n", ""
-
-    system "swift", "build", "-c", "release", "--disable-sandbox"
-
-    bin.install ".build/release/testanyware"
-    bin.install ".build/release/testanyware-query"
-
-    # Install VM management scripts
-    (libexec/"testanyware"/"vm").install Dir["vm/*.sh"]
+    bin.install Dir["bin/*"]
+    pkgshare.install Dir["share/testanyware/*"]
   end
 
   test do
-    assert_match "TestAnyware", shell_output("#{bin}/testanyware instructions")
-    assert_match version.to_s, shell_output("#{bin}/testanyware-query --version").strip
+    assert_match "testanyware", shell_output("#{bin}/testanyware --help")
   end
 end
