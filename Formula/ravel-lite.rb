@@ -1,28 +1,28 @@
 class RavelLite < Formula
   desc "An orchestration loop for LLM development cycles"
   homepage "https://github.com/Linkuistics/Ravel-Lite"
-  version "1.0.3"
+  version "1.0.4"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/Ravel-Lite/releases/download/v1.0.3/ravel-lite-v1.0.3-aarch64-apple-darwin.tar.xz"
-      sha256 "faf5fc723fc0b84bde4f372591b6409f8d1336595a13ea219ec82b1250257717"
+      url "https://github.com/Linkuistics/Ravel-Lite/releases/download/v1.0.4/ravel-lite-v1.0.4-aarch64-apple-darwin.tar.xz"
+      sha256 "a0d443c364875a21591b323732d7a057141e7ce19a9559863e0e675edc2125e9"
     end
     on_intel do
-      url "https://github.com/Linkuistics/Ravel-Lite/releases/download/v1.0.3/ravel-lite-v1.0.3-x86_64-apple-darwin.tar.xz"
-      sha256 "1f7d0e6c3fffe44b813d6ae4e23647b9c94f13a90365d1b503b47e3768d0fba7"
+      url "https://github.com/Linkuistics/Ravel-Lite/releases/download/v1.0.4/ravel-lite-v1.0.4-x86_64-apple-darwin.tar.xz"
+      sha256 "b47ea768329eb5a1d1c4d9efc9a1cd16645e0cf0fb5d733de5a5edd4708feee7"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/Linkuistics/Ravel-Lite/releases/download/v1.0.3/ravel-lite-v1.0.3-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "704a4c8bf57fb0e2bb9162bae71f7c8f074ed83d8e26bb9b01de47c11e5cbe35"
+      url "https://github.com/Linkuistics/Ravel-Lite/releases/download/v1.0.4/ravel-lite-v1.0.4-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "2d5cf3753781d01d1585c018ac3f164475f4612e6488989339c5961183703d44"
     end
     on_intel do
-      url "https://github.com/Linkuistics/Ravel-Lite/releases/download/v1.0.3/ravel-lite-v1.0.3-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "7e699767f695f3bfaac1e15f61a898f38b49679ee3a487a6be90a0f529a66bcc"
+      url "https://github.com/Linkuistics/Ravel-Lite/releases/download/v1.0.4/ravel-lite-v1.0.4-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "aa9936de4b033315a6c943ab37696e61a3c2fd8ace8aa6dbcb3733e6882ea496"
     end
   end
 
