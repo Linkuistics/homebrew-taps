@@ -1,6 +1,6 @@
 cask "modaliser" do
-  version "1.0.8"
-  sha256 "03bfc3c41cabe6be67d71971dd7d7bc3af4976bd1fe43dae02d1a4f3fd90b963"
+  version "1.0.9"
+  sha256 "5ca62f944d4ef36a765797978cc80c71ff13e2245c3249f6ee46d59cb3cef7ce"
 
   url "https://github.com/Linkuistics/Modaliser/releases/download/v#{version}/modaliser-v#{version}-aarch64-apple-darwin.tar.xz"
   name "Modaliser"
