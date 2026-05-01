@@ -1,28 +1,28 @@
 class Atlas < Formula
   desc "Design recovery and architectural pattern extraction for large codebases"
   homepage "https://github.com/linkuistics/Atlas"
-  version "1.2.1"
+  version "1.3.0"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/linkuistics/Atlas/releases/download/v1.2.1/atlas-v1.2.1-aarch64-apple-darwin.tar.xz"
-      sha256 "3b1930f2e2c853b07fa8a405ffb582e36c94bf052876beb344b4ae8ce17a0bc1"
+      url "https://github.com/linkuistics/Atlas/releases/download/v1.3.0/atlas-v1.3.0-aarch64-apple-darwin.tar.xz"
+      sha256 "4600bf7b0432507faf966f5c0471c687441bab6634d5c7e50ba4706b276f4215"
     end
     on_intel do
-      url "https://github.com/linkuistics/Atlas/releases/download/v1.2.1/atlas-v1.2.1-x86_64-apple-darwin.tar.xz"
-      sha256 "c28f361832c2db9ce34c014d80f5a343dc2e1734820c40ed67c2db6d902f7b20"
+      url "https://github.com/linkuistics/Atlas/releases/download/v1.3.0/atlas-v1.3.0-x86_64-apple-darwin.tar.xz"
+      sha256 "e013bf6656fc191f72e54d1f0b98ea7bca662a5e9ae32132f6d07c9df000da0e"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/linkuistics/Atlas/releases/download/v1.2.1/atlas-v1.2.1-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "f7d4bc076bb789326c7f5c0ca712a3fd4208532e30525a1ec1f169c3ad8844e8"
+      url "https://github.com/linkuistics/Atlas/releases/download/v1.3.0/atlas-v1.3.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "80be5e9d0b82d593d226d1513350520de5ab4780692715e01c757fb27d88cc85"
     end
     on_intel do
-      url "https://github.com/linkuistics/Atlas/releases/download/v1.2.1/atlas-v1.2.1-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "f43a33cc0554a2a6b11bd27509927970c27167e9e924f4e6f2a10045c1b8aa44"
+      url "https://github.com/linkuistics/Atlas/releases/download/v1.3.0/atlas-v1.3.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "63510350374496f33617bf9d597c3d5a82b4761596c4b7fe46e6f3ff4f246bb7"
     end
   end
 
