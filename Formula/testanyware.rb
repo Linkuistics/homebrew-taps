@@ -1,7 +1,7 @@
 class Testanyware < Formula
   desc "GUI testing tool for VMs, using tart, designed for LLM-driven testing"
   homepage "https://github.com/Linkuistics/TestAnyware"
-  version "1.1.0"
+  version "1.2.0"
   license "MIT"
 
   depends_on :macos
@@ -9,8 +9,8 @@ class Testanyware < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/TestAnyware/releases/download/v1.1.0/testanyware-v1.1.0-aarch64-apple-darwin.tar.xz"
-      sha256 "078f1db0a3b3d03d8269278e565e26391a152e33086fe283f9ac16d552635438"
+      url "https://github.com/Linkuistics/TestAnyware/releases/download/v1.2.0/testanyware-v1.2.0-aarch64-apple-darwin.tar.xz"
+      sha256 "40293be65e5ee972f98ae697f64822d1b3ed27b3c7c4ee292c797bec2420d729"
     end
   end
 
