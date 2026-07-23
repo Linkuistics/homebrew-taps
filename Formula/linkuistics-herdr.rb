@@ -3,9 +3,9 @@ class LinkuisticsHerdr < Formula
   homepage "https://github.com/AntonyBlakey/herdr"
   url "https://github.com/AntonyBlakey/herdr.git",
       branch:   "ui-layout",
-      revision: "552c16ec9480594094213ba5017ea299f8e5bb02"
-  version "0.7.4-uilayout.552c16e"
-  license "AGPL-3.0-or-later"
+      revision: "b9570aa70d99525729e424db7862336ff6912293"
+  version "0.7.5-uilayout.b9570aa"
+  license "Apache-2.0"
 
   depends_on "rust" => :build
   depends_on "zig@0.15" => :build
