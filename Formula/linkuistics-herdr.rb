@@ -1,8 +1,8 @@
 class LinkuisticsHerdr < Formula
-  desc "Herdr, built from AntonyBlakey/herdr@ui-layout with three carried patches"
+  desc "Herdr, built from AntonyBlakey/herdr@linkuistics-fork with carried patches"
   homepage "https://github.com/AntonyBlakey/herdr"
   url "https://github.com/AntonyBlakey/herdr.git",
-      branch:   "ui-layout",
+      branch:   "linkuistics-fork",
       revision: "84e8f7d8e55a4be4daac0f1abad8dbf2a4642e16"
   version "0.7.5-linkuistics.2"
   license "Apache-2.0"
