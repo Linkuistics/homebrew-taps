@@ -12,6 +12,12 @@ class LinkuisticsHerdr < Formula
 
   def install
     ENV["ZIG"] = formula_opt_bin("zig@0.15")/"zig"
+    # herdr builds `--version` as {CARGO_PKG_VERSION}-{channel}.{build_id} from
+    # these compile-time vars (src/build_info.rs). Without them `channel` falls
+    # back to "stable" and the binary reports a bare "0.7.5", indistinguishable
+    # from an upstream build. Derived from `version` so the two cannot drift.
+    ENV["HERDR_BUILD_CHANNEL"] = "linkuistics"
+    ENV["HERDR_BUILD_ID"] = version.to_s.split("-linkuistics.").last
     system "cargo", "install", *std_cargo_args
   end
 
@@ -50,6 +56,6 @@ class LinkuisticsHerdr < Formula
   end
 
   test do
-    assert_match "herdr #{version.to_s.split("-").first}", shell_output("#{bin}/herdr --version")
+    assert_match "herdr #{version}", shell_output("#{bin}/herdr --version")
   end
 end
