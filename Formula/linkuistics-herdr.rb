@@ -3,8 +3,8 @@ class LinkuisticsHerdr < Formula
   homepage "https://github.com/AntonyBlakey/herdr"
   url "https://github.com/AntonyBlakey/herdr.git",
       branch:   "linkuistics-fork",
-      revision: "84e8f7d8e55a4be4daac0f1abad8dbf2a4642e16"
-  version "0.7.5-linkuistics.2"
+      revision: "085bcf89ce8fd49a7b6920da250e5abd59b03674"
+  version "0.7.5-linkuistics.3"
   license "Apache-2.0"
 
   depends_on "rust" => :build
@@ -44,12 +44,15 @@ class LinkuisticsHerdr < Formula
                          reopen it, are in docs/adr/herdr-optional-ui.md in
                          Linkuistics/grove. Ends only if upstream separates
                          session identity from lifecycle state on its own.
-        * border colors — `[ui] active_pane_border_fg/_bg` and the `inactive_`
-                         pair, so the focused pane's border can be recoloured
-                         without restyling the whole UI via the shared accent.
-                         Unset reproduces upstream's appearance exactly. Ends
-                         only if upstream makes border colors configurable
-                         independently of `[ui] accent`.
+        * pane appearance — `[ui] active_pane_border_fg/_bg` and the `inactive_`
+                         pair recolour split-pane borders without restyling the
+                         whole UI through the shared accent. `inactive_pane_haze`
+                         blends unfocused panes toward a colour so the focused
+                         one stays obvious while typing; upstream's dim applies
+                         only outside Terminal mode. Both default to off and
+                         reproduce upstream's appearance exactly. Ends only if
+                         upstream makes pane appearance configurable to the same
+                         degree.
 
       Versioning: upstream's version plus `-linkuistics.<seq>`, where <seq>
       increments on every ship and resets when upstream's version bumps. Bump
