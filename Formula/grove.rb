@@ -1,53 +1,64 @@
 class Grove < Formula
   desc "Hierarchical, self-extending workstream tool for AI agents"
   homepage "https://github.com/Linkuistics/grove"
-  version "19.4.0"
+  version "19.5.0"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v19.4.0/grove-v19.4.0-aarch64-apple-darwin.tar.xz"
-      sha256 "8476efd15edab0229e1614fdee7860f4c6924ea6470a3b81e5bd3d3febd1f45f"
+      url "https://github.com/Linkuistics/grove/releases/download/v19.5.0/grove-v19.5.0-aarch64-apple-darwin.tar.xz"
+      sha256 "d48a01033a3e7846f60d5752127f0f5d6de2294778de09e0a3d1a9f5a3b34976"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v19.4.0/grove-v19.4.0-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "cc9e6acf4e55c3cd7489c3371c3e4cf107e0bf90103e735d7870f119d731c874"
+      url "https://github.com/Linkuistics/grove/releases/download/v19.5.0/grove-v19.5.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "ba54d956c8315dd4179d2c2375168993d33759772fbf89071832c0319de5243a"
     end
     on_intel do
-      url "https://github.com/Linkuistics/grove/releases/download/v19.4.0/grove-v19.4.0-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "baeefcedcfcce3155493d4fdd01b9cf0f76fe0da162d1d3f3b783b647c24bd1d"
+      url "https://github.com/Linkuistics/grove/releases/download/v19.5.0/grove-v19.5.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "afeaafac788101441f42989c1713046ccc477a9095126ca55ddef643c090126d"
     end
   end
 
   def install
-    # The methodology skill is NOT fetched or installed here. The `grove` binary
-    # embeds the full `content/` tree (self-extension-core-and-methodology / task-tree-scheme) and provisions it to
-    # ~/.claude/skills/grove/ on the first run, so the skill can never drift
-    # from the binary. Do NOT reintroduce a content/ download into this formula
-    # or the release tarball — `brew install grove` is the sole gesture.
+    # Two binaries and nothing else. The methodology is NOT fetched or installed
+    # here, and is no longer carried inside the binary either: it ships as the
+    # `grove` agent-skill plugin with its own install route (see the caveats).
+    # Do NOT reintroduce a content/ download into this formula or the release
+    # tarball — that was the pre-v19.5.0 shape, and its replacement is a plugin
+    # rather than a second thing brew installs.
     bin.install "grove", "grove-llm"
   end
 
   def caveats
     <<~EOS
-      grove ships its methodology inside the binary. The first
-        grove
-      run from inside your working tree provisions the global skill at
-      ~/.claude/skills/grove/ — there is no separate install step. The skill
-      re-provisions automatically the next time you run `grove` after upgrading
-      the formula.
+      grove needs two things this formula does not install.
 
-      grove reads all of its launch policy from ~/.config/grove/config.kdl,
-      which it never creates: give every session kind one command template
-      before the first run.
+      1. Its methodology, as an agent-skill plugin. Grove names the skill a
+         session must load and does not deliver it — a session whose harness
+         cannot load that skill has nothing to read.
+
+           Claude Code:  /plugin marketplace add Linkuistics/grove
+                         /plugin install grove@linkuistics
+           Codex, Gemini CLI, Pi:
+                         git clone https://github.com/Linkuistics/grove
+                         ./grove/plugins/install.sh
+
+         Before v19.5.0 grove embedded the methodology and swept it into
+         ~/.claude/skills/grove/ and two siblings on every run. It no longer
+         writes those directories; if an older grove left one behind, remove it
+         before running plugins/install.sh, which refuses to clobber it.
+
+      2. Its launch policy, ~/.config/grove/config.kdl, which grove never
+         creates: give every session kind one command template before the first
+         run.
     EOS
   end
 
   test do
-    assert_match "grove 19.4.0", shell_output("#{bin}/grove --version")
-    assert_match "grove-llm 19.4.0", shell_output("#{bin}/grove-llm --version")
+    assert_match "grove 19.5.0", shell_output("#{bin}/grove --version")
+    assert_match "grove-llm 19.5.0", shell_output("#{bin}/grove-llm --version")
   end
 end
