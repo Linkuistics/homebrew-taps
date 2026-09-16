@@ -1,24 +1,24 @@
 class Grove < Formula
   desc "Hierarchical, self-extending workstream tool for AI agents"
   homepage "https://github.com/Linkuistics/grove"
-  version "21.4.0"
+  version "21.5.0"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v21.4.0/grove-v21.4.0-aarch64-apple-darwin.tar.xz"
-      sha256 "6e72e058a26d04f46e0ba389d9c0bbba1d0939bd937b54d0ee0df00b5468a6bb"
+      url "https://github.com/Linkuistics/grove/releases/download/v21.5.0/grove-v21.5.0-aarch64-apple-darwin.tar.xz"
+      sha256 "51530e93906b7728d7b6ea014b22bb49665666c07ca32804906ba5a3408f0048"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v21.4.0/grove-v21.4.0-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "6f1b69041c7eb4d033e826c754c3c55698c187658423399185c4bb1d9b262281"
+      url "https://github.com/Linkuistics/grove/releases/download/v21.5.0/grove-v21.5.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "60ada25e5485953e074bcace5941e2fcdc4082d9901d47873a6b6742198cd32a"
     end
     on_intel do
-      url "https://github.com/Linkuistics/grove/releases/download/v21.4.0/grove-v21.4.0-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "95920d0924033468f61972fb8d989f35482f381c9416586f366e03667411f53a"
+      url "https://github.com/Linkuistics/grove/releases/download/v21.5.0/grove-v21.5.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "6475536c62bf116c92c05b30f52e6a8496f9b39ef81eaf1c4949bfbbf60b44bf"
     end
   end
 
@@ -58,7 +58,7 @@ class Grove < Formula
   end
 
   test do
-    assert_match "grove 21.4.0", shell_output("#{bin}/grove --version")
-    assert_match "grove-llm 21.4.0", shell_output("#{bin}/grove-llm --version")
+    assert_match "grove 21.5.0", shell_output("#{bin}/grove --version")
+    assert_match "grove-llm 21.5.0", shell_output("#{bin}/grove-llm --version")
   end
 end
