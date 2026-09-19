@@ -3,15 +3,15 @@ class LinkuisticsHerdr < Formula
   homepage "https://github.com/AntonyBlakey/herdr"
   url "https://github.com/AntonyBlakey/herdr.git",
       branch:   "linkuistics-fork",
-      revision: "272964181c8431bdb80be04e283ef628eec20f15"
-  version "0.8.2-linkuistics.1"
+      revision: "80c07968750bd4b1b17a977f29e96396168404f0"
+  version "0.9.1-linkuistics.1"
   license "Apache-2.0"
 
   depends_on "rust" => :build
-  depends_on "zig@0.15" => :build
+  depends_on "zig@0.16" => :build
 
   def install
-    ENV["ZIG"] = formula_opt_bin("zig@0.15")/"zig"
+    ENV["ZIG"] = formula_opt_bin("zig@0.16")/"zig"
     # herdr builds `--version` as {CARGO_PKG_VERSION}-{channel}.{build_id} from
     # these compile-time vars (src/build_info.rs). Without them `channel` falls
     # back to "stable" and the binary reports the upstream version, indistinguishable
