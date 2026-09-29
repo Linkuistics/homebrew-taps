@@ -24,9 +24,11 @@ cask "koine" do
   # Koine registers its login item through SMAppService.mainApp, a Background
   # Task Management entry tied to the bundle, not a System Events login item, so
   # `uninstall login_item:` (an AppleScript deletion) does not apply to it.
-  zap trash: [
-    "~/Library/Application Support/Koine",
-    "~/Library/Preferences/dev.antony.Koine.plist",
-    "~/Library/Saved Application State/dev.antony.Koine.savedState",
-  ]
+  #
+  # Measured on a clean macOS 26 VM, this is the one path Koine writes that a
+  # zap can name. Koine keeps no preferences, and macOS 26 keeps an app's saved
+  # window state under a per-machine UUID in a system container, not at
+  # ~/Library/Saved Application State/<bundle id>.
+  # https://github.com/Linkuistics/Koine/blob/main/docs/verification/homebrew-install-vm.md
+  zap trash: "~/Library/Application Support/Koine"
 end
