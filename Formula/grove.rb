@@ -1,24 +1,24 @@
 class Grove < Formula
   desc "Hierarchical, self-extending workstream tool for AI agents"
   homepage "https://github.com/Linkuistics/grove"
-  version "21.13.0"
+  version "22.0.0"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v21.13.0/grove-v21.13.0-aarch64-apple-darwin.tar.xz"
-      sha256 "fd0e9c29e6a2a602ed89be4f2a246c4ef7ec5d8d8da09a1e3716cf2ddafbbda8"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.0.0/grove-v22.0.0-aarch64-apple-darwin.tar.xz"
+      sha256 "b04fb9642404757c6cbcbf523ada5db250239a97db6571def3e479f58e19d5d1"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v21.13.0/grove-v21.13.0-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "85ac63a64fef06b1e8583d3507fbecf69e074e7dede2f832eed903c0bd0e6e6f"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.0.0/grove-v22.0.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "7d58558639925aa84b082e781ed742cb37209cb0663379876bf3afe2758858f7"
     end
     on_intel do
-      url "https://github.com/Linkuistics/grove/releases/download/v21.13.0/grove-v21.13.0-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "4ff4525323658d05da9fb5e2e4aa152b98240138b1da312efa64ec2ccb1d0b48"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.0.0/grove-v22.0.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "65e0212e375b7f01467afc0bb75e1462a877d5cfc3206741ac4b6cba1cece29f"
     end
   end
 
@@ -55,33 +55,45 @@ class Grove < Formula
         git clone https://github.com/Linkuistics/grove
         ./grove/plugins/install.sh
 
-      Grove also needs launch policy in ~/.config/grove/config.kdl. Run
-      grove config examples for inactive samples, then give every session
-      kind you use a command template before the first run.
+      Grove launches every session through harness-dispatch, which needs
+      your policy in ~/.config/harness-dispatch/policy.ts. Install the sample:
+
+        harness-dispatch init
+
+      Read it and edit it before the first run: it launches codex with
+      approvals off and full access. A config.kdl or .grove.kdl from an
+      earlier release is no longer read.
     EOS
   end
 
   test do
-    assert_equal "grove 21.13.0\n", shell_output("#{bin}/grove --version")
-    assert_equal "grove-llm 21.13.0\n", shell_output("#{bin}/grove-llm --version")
-    assert_equal "harness-dispatch 21.13.0\n", shell_output("#{bin}/harness-dispatch --version")
+    assert_equal "grove 22.0.0\n", shell_output("#{bin}/grove --version")
+    assert_equal "grove-llm 22.0.0\n", shell_output("#{bin}/grove-llm --version")
+    assert_equal "harness-dispatch 22.0.0\n", shell_output("#{bin}/harness-dispatch --version")
 
     # The worker reports its own version, and the front refuses a worker from
     # another build before evaluating anything. Inspect through a symlink to
     # the front, as bin/ is linked, so the worker is found from the real path.
     (testpath/"policy.ts").write <<~TS
       export const policy = {
-        schemaVersion: 1,
+        schemaVersion: 2,
         version: "brew-test",
-        catalog: [{ id: "check", provider: "check", model: "check", effort: "check", program: "true", args: [{ slot: "prompt" }] }],
-        routes: { check: "check" },
+        select: () => ({
+          status: "selected",
+          program: "true",
+          args: [],
+          provider: "check",
+          model: "check",
+          effort: "check",
+          reason: "brew test",
+        }),
       };
     TS
     ln_s bin/"harness-dispatch", testpath/"harness-dispatch"
     report = JSON.parse(shell_output(
       "#{testpath}/harness-dispatch inspect --kind check --config #{testpath}/policy.ts --json",
     ))
-    assert_equal "21.13.0", report["worker"]["packageVersion"]
+    assert_equal "22.0.0", report["worker"]["packageVersion"]
     assert_equal (libexec/"harness-dispatch/harness-dispatch-policy").realpath.to_s, report["worker"]["path"]
   end
 end
