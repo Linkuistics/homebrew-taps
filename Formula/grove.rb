@@ -1,24 +1,24 @@
 class Grove < Formula
   desc "Hierarchical, self-extending workstream tool for AI agents"
   homepage "https://github.com/Linkuistics/grove"
-  version "22.0.0"
+  version "22.1.0"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.0.0/grove-v22.0.0-aarch64-apple-darwin.tar.xz"
-      sha256 "b04fb9642404757c6cbcbf523ada5db250239a97db6571def3e479f58e19d5d1"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.1.0/grove-v22.1.0-aarch64-apple-darwin.tar.xz"
+      sha256 "b45a030cd280d3265e7a5857342e3cfe54ca6d2569f49892addb96d82cca3add"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.0.0/grove-v22.0.0-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "7d58558639925aa84b082e781ed742cb37209cb0663379876bf3afe2758858f7"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.1.0/grove-v22.1.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "5fdf4f52e2413d470c434238200770255c6625f301e1282bffc55892caaa02f1"
     end
     on_intel do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.0.0/grove-v22.0.0-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "65e0212e375b7f01467afc0bb75e1462a877d5cfc3206741ac4b6cba1cece29f"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.1.0/grove-v22.1.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "3e519c80d80eff60706cf100347175701101ba361be32b7f59a0b804535c3a3a"
     end
   end
 
@@ -67,9 +67,9 @@ class Grove < Formula
   end
 
   test do
-    assert_equal "grove 22.0.0\n", shell_output("#{bin}/grove --version")
-    assert_equal "grove-llm 22.0.0\n", shell_output("#{bin}/grove-llm --version")
-    assert_equal "harness-dispatch 22.0.0\n", shell_output("#{bin}/harness-dispatch --version")
+    assert_equal "grove 22.1.0\n", shell_output("#{bin}/grove --version")
+    assert_equal "grove-llm 22.1.0\n", shell_output("#{bin}/grove-llm --version")
+    assert_equal "harness-dispatch 22.1.0\n", shell_output("#{bin}/harness-dispatch --version")
 
     # The worker reports its own version, and the front refuses a worker from
     # another build before evaluating anything. Inspect through a symlink to
@@ -93,7 +93,7 @@ class Grove < Formula
     report = JSON.parse(shell_output(
       "#{testpath}/harness-dispatch inspect --kind check --config #{testpath}/policy.ts --json",
     ))
-    assert_equal "22.0.0", report["worker"]["packageVersion"]
+    assert_equal "22.1.0", report["worker"]["packageVersion"]
     assert_equal (libexec/"harness-dispatch/harness-dispatch-policy").realpath.to_s, report["worker"]["path"]
   end
 end
