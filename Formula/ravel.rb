@@ -3,24 +3,24 @@ require "shellwords"
 class Ravel < Formula
   desc "Policy router and session process manager"
   homepage "https://github.com/Linkuistics/Ravel"
-  version "0.1.0"
+  version "1.0.0"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/Ravel/releases/download/v0.1.0/ravel-v0.1.0-aarch64-apple-darwin.tar.xz"
-      sha256 "7e33ae0c56a93e6a5cff256c5a8a981dec4eb4d114c1f636ce8ee23d1f5d1059"
+      url "https://github.com/Linkuistics/Ravel/releases/download/v1.0.0/ravel-v1.0.0-aarch64-apple-darwin.tar.xz"
+      sha256 "d1f253db86cde3c625950cda2d8fa929ca4d1e4529ca6c3f223e138f9be9a922"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/Linkuistics/Ravel/releases/download/v0.1.0/ravel-v0.1.0-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "19a20dc895a09440cbe3d8da1ce80b96311fbc1c3e6be5e2bf1eb18bb6cc0f7e"
+      url "https://github.com/Linkuistics/Ravel/releases/download/v1.0.0/ravel-v1.0.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "288158c1259667dbd11d9f71aa5d643b4da4e08ffc4402524f4852afb314f732"
     end
     on_intel do
-      url "https://github.com/Linkuistics/Ravel/releases/download/v0.1.0/ravel-v0.1.0-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "b9e3443dc428923d6ab45dff7d3837def16bd36985ddd5900f75489a7a4b96e8"
+      url "https://github.com/Linkuistics/Ravel/releases/download/v1.0.0/ravel-v1.0.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "1264ea0f3dd113f5dbb0914992ee9a7734285c0ddcc161e9acaffd83c037f9a9"
     end
   end
 
@@ -33,7 +33,7 @@ class Ravel < Formula
   end
 
   test do
-    assert_equal "ravel 0.1.0\n", shell_output([(bin/"ravel").to_s, "--version"].shelljoin)
+    assert_equal "ravel 1.0.0\n", shell_output([(bin/"ravel").to_s, "--version"].shelljoin)
     (testpath/"home").mkpath
     (testpath/"tmp").mkpath
     ln_s bin/"ravel", testpath/"ravel"
