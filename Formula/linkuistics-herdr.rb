@@ -3,8 +3,8 @@ class LinkuisticsHerdr < Formula
   homepage "https://github.com/AntonyBlakey/herdr"
   url "https://github.com/AntonyBlakey/herdr.git",
       branch:   "linkuistics-fork",
-      revision: "80c07968750bd4b1b17a977f29e96396168404f0"
-  version "0.9.1-linkuistics.1"
+      revision: "4f0811ed88654cf6f719fc4f17c61f4b36c013f0"
+  version "0.9.5-linkuistics.1"
   license "Apache-2.0"
 
   depends_on "rust" => :build
