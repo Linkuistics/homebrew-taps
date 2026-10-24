@@ -1,24 +1,24 @@
 class Grove < Formula
   desc "Hierarchical, self-extending workstream tool for AI agents"
   homepage "https://github.com/Linkuistics/grove"
-  version "22.5.0"
+  version "22.6.0"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.5.0/grove-v22.5.0-aarch64-apple-darwin.tar.xz"
-      sha256 "36641e8bf5bad59e1bd9de6052516d4eb77415f5c68640fe27468fb35322388c"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.6.0/grove-v22.6.0-aarch64-apple-darwin.tar.xz"
+      sha256 "2a223ce25e76f6c386b73431682426143f33a3bde26aa52cce40bfcd104cbb2b"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.5.0/grove-v22.5.0-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "ec61f0b51dbb384aac326a28c2d5394de9a220910bc34b3cb69b93100c8018d8"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.6.0/grove-v22.6.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "f9ecc21df24b5fc6f8a69a9ae58e36dce0a62de798d329042f02c209c3ebbb84"
     end
     on_intel do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.5.0/grove-v22.5.0-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "7df7f60a10d2629ab1ceb699c7b2d8cac5adae6e324952cfd5c4a9fd2be4da78"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.6.0/grove-v22.6.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "4ec064e476d6b396f3714c94771bc6434c92da8a3a9fd85e8ef734462d8ee008"
     end
   end
 
@@ -70,8 +70,8 @@ class Grove < Formula
   end
 
   test do
-    assert_equal "grove 22.5.0\n", shell_output("#{bin}/grove --version")
-    assert_equal "grove-llm 22.5.0\n", shell_output("#{bin}/grove-llm --version")
+    assert_equal "grove 22.6.0\n", shell_output("#{bin}/grove --version")
+    assert_equal "grove-llm 22.6.0\n", shell_output("#{bin}/grove-llm --version")
     ravel = Formula["ravel"].opt_bin/"ravel"
     assert_match(/^ravel 1\./, shell_output("#{ravel} --version"))
     assets = libexec/"ravel-policy"
