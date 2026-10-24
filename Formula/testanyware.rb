@@ -1,13 +1,13 @@
 class Testanyware < Formula
   desc "GUI testing tool for VMs, using tart, designed for LLM-driven testing"
   homepage "https://github.com/Linkuistics/TestAnyware"
-  version "2.4.0"
+  version "2.5.0"
   license "MIT"
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.4.0/testanyware-v2.4.0-aarch64-apple-darwin.tar.xz"
-      sha256 "0b72e8453affde6353bbd5f3a47142f44dec156adb5d14f46685246b7498a1da"
+      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.5.0/testanyware-v2.5.0-aarch64-apple-darwin.tar.xz"
+      sha256 "3a16d7b8d2cd72f2f2b31b938586aa393d6f780058b6a173bd927dbc842c6be0"
     end
   end
 
@@ -18,15 +18,15 @@ class Testanyware < Formula
     depends_on "python@3.12"
 
     on_arm do
-      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.4.0/testanyware-v2.4.0-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "28a4e07c17339dbc2bb25a775b3e32fa9ec7db25b344c171e49826e116a263be"
+      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.5.0/testanyware-v2.5.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "d7c4fc1d5cbae5ca8ca6c16e8dbb7a8efd522cf1d5efacb5d64e6d1c07ef4b80"
     end
     on_intel do
       # BUILD/LINK-VERIFIED ONLY: no native x86_64 guest verifies this at
       # runtime (ADR-0009 no-silent-caps). The OCR/record runtime path here is
       # unproven; aarch64-linux is the harness-green tier.
-      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.4.0/testanyware-v2.4.0-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "d6b417df7cc2782a289dc748b2e0da6548b3f7f022948e9dbd078f52682a6de1"
+      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.5.0/testanyware-v2.5.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "1dd97a85ad99ff0b5e89db46081588ef8de54d1ac25f98ac10dfeae232da9a86"
     end
 
     # EasyOCR backs `screen find-text` on Linux. Pinned by sha256; pip resolves

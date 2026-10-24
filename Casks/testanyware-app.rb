@@ -1,6 +1,6 @@
 cask "testanyware-app" do
-  version "2.4.0"
-  sha256 "7c32be63759c539681f5c01d9b3162e45dae51c2010c41d0977fbf5f142890a7"
+  version "2.5.0"
+  sha256 "8dfa3a58db50b7d6a8e4976c4700f2318f23371965a66711a7317756e43ec246"
 
   url "https://github.com/Linkuistics/TestAnyware/releases/download/v#{version}/testanyware-app-v#{version}-aarch64-apple-darwin.zip"
   name "TestAnyware"
