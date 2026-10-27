@@ -1,6 +1,6 @@
 cask "koine" do
-  version "0.3.0"
-  sha256 "b6b6f085cd8ff7da61bf5616e07d54714511039f85cfea7085010bc34e930200"
+  version "0.4.0"
+  sha256 "e1cd1481195e41a042a49cc2131d35fb12e34c0655c3e78375a965f7438af4e8"
 
   url "https://github.com/Linkuistics/Koine/releases/download/v#{version}/Koine-#{version}-aarch64-apple-darwin.zip"
   name "Koine"
