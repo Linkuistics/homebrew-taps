@@ -1,13 +1,13 @@
 class Testanyware < Formula
   desc "GUI testing tool for VMs, using tart, designed for LLM-driven testing"
   homepage "https://github.com/Linkuistics/TestAnyware"
-  version "2.7.0"
+  version "2.8.0"
   license "MIT"
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.7.0/testanyware-v2.7.0-aarch64-apple-darwin.tar.xz"
-      sha256 "9793e38f08ad43c01f178d3a6a3f6f014736f05afb73bfb7a79bbafa412db098"
+      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.8.0/testanyware-v2.8.0-aarch64-apple-darwin.tar.xz"
+      sha256 "bda57d356222e6ef7eb7bc7be7c6c815cc890b9b0743ff7c1aa5b6130c285a30"
     end
   end
 
@@ -18,15 +18,15 @@ class Testanyware < Formula
     depends_on "python@3.12"
 
     on_arm do
-      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.7.0/testanyware-v2.7.0-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "523123f03f3dc4e95c55ee25ad4bd07d9cdb8916fdfcc550d18f8c1fe174d416"
+      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.8.0/testanyware-v2.8.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "1184d0701592575ecfe8d4114506af10d9da60c85020b9ce48bc78406c168524"
     end
     on_intel do
       # BUILD/LINK-VERIFIED ONLY: no native x86_64 guest verifies this at
       # runtime (ADR-0009 no-silent-caps). The OCR/record runtime path here is
       # unproven; aarch64-linux is the harness-green tier.
-      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.7.0/testanyware-v2.7.0-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "f04704f07f296ad1043c0c5b50943afff5c0f151a8d33ddbc8da59c4543dea09"
+      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.8.0/testanyware-v2.8.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "ad562f41b15056a899e944aa7250ffda51879678fdedd24edb49b0b3cb8b13f9"
     end
 
     # EasyOCR backs `screen find-text` on Linux. Pinned by sha256; pip resolves
@@ -41,6 +41,10 @@ class Testanyware < Formula
   def install
     bin.install "bin/testanyware"
     pkgshare.install Dir["share/testanyware/*"]
+    # The Ravel source of the skill using-testanyware. Homebrew links the keg's share/ into the
+    # prefix, so the source appears in Ravel's default skill directory,
+    # $(brew --prefix)/share/ravel/skills/testanyware. The move keeps each file's mode.
+    (share/"ravel/skills").install "share/ravel/skills/testanyware"
 
     on_linux do
       # The cross binary hard-NEEDs the BtbN ffmpeg-8 sonames (which match no
@@ -64,5 +68,6 @@ class Testanyware < Formula
 
   test do
     assert_match "testanyware", shell_output("#{bin}/testanyware --help")
+    assert_path_exists share/"ravel/skills/testanyware/skills/using-testanyware/SKILL.md"
   end
 end
