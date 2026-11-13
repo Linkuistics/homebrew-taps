@@ -9,6 +9,7 @@ class RavelAT2 < Formula
   version "2.0.0"
   license "Apache-2.0"
   keg_only :versioned_formula
+  deprecate! date: "2026-11-11", because: :versioned_formula, replacement_formula: "ravel"
 
   on_macos do
     on_arm do
