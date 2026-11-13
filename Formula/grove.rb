@@ -1,90 +1,201 @@
+require "json"
+require "shellwords"
+
 class Grove < Formula
   desc "Hierarchical, self-extending workstream tool for AI agents"
   homepage "https://github.com/Linkuistics/grove"
-  version "22.8.0"
+  version "22.9.0"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.8.0/grove-v22.8.0-aarch64-apple-darwin.tar.xz"
-      sha256 "363a44fbb426cbfa9340d6752da7d0f2acfe1b1937b1534b55db11291b6d4f13"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.9.0/grove-v22.9.0-aarch64-apple-darwin.tar.xz"
+      sha256 "0239001fc1d993dfd66293aeefbea2979e36103335a288a12a7b4c79c3fb9832"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.8.0/grove-v22.8.0-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "6c3a8a07d610cfeda69f1883b59e66376717603c02a2760a02bfbd4344e725df"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.9.0/grove-v22.9.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "522b25b6b3583c00d451cc88168072a786468368e10f3b441de977c926428ef0"
     end
     on_intel do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.8.0/grove-v22.8.0-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "e9b2386d05d15d0e15a03ae09415f43c355b30e3052c6e3bbf433fa7a258bc90"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.9.0/grove-v22.9.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "f6181bf6d031903e446c62fba52ac60d566392872e1ca3937efc201053886938"
     end
   end
 
   depends_on "linkuistics/taps/ravel"
 
+  # The skill sources of the keg, in byte order. Each source is a private
+  # payload in libexec/skill-sources, and a relative directory symlink in
+  # share/ravel/skills is its public alias. Homebrew links each alias into
+  # $(brew --prefix)/share/ravel/skills, Ravel's default skill directory.
+  # docs/specs/codex-skill-provisioning.md, "The keg layout".
+  SKILL_SOURCES = %w[design engineering grove-core requirements research writing].freeze
+
   def install
-    # Codex skill snapshots are embedded in grove and provisioned at startup.
-    # Claude Code retains marketplace delivery; no separate payload is fetched.
+    # The archive carries executables, caller assets, core and the five domain
+    # packs. No install or upgrade step here writes, repairs or removes a
+    # native skill installation.
     #
     # Readable caller assets retain ordinary relative imports. Ravel owns its
     # own front, private worker, SDK and notices in its independently sized keg.
     bin.install "bin/grove", "bin/grove-llm"
     libexec.install "libexec/ravel-policy"
+    # The archive holds each source as a directory in share/ravel/skills. Each
+    # source moves into libexec/skill-sources, and a relative directory
+    # symlink in share/ravel/skills names it. Keg#link_dir handles that
+    # symlink as a file, so `brew link` and conflict repair never descend into
+    # a source and link its files one by one. install_symlink makes the link
+    # relative to the real share/ravel/skills, so it names the same keg.
+    # https://github.com/Homebrew/brew/blob/3ccfa1d07143/Library/Homebrew/keg.rb
+    # https://github.com/Homebrew/brew/blob/7.0.12/Library/Homebrew/extend/pathname.rb
+    # Homebrew's cleaner sets modes only under bin, sbin and lib, and its prune
+    # step skips libexec, so each source keeps the modes of its copy.
+    # https://github.com/Homebrew/brew/blob/7.0.12/Library/Homebrew/cleaner.rb
+    SKILL_SOURCES.each do |id|
+      (libexec/"skill-sources").install "share/ravel/skills/#{id}"
+      (share/"ravel/skills").install_symlink libexec/"skill-sources"/id
+    end
+    # The marketplace files of the hook adapters stay at the keg root, which
+    # Homebrew links nowhere. Each names the hooks plugin inside the private
+    # writing source by a path relative to that root.
+    prefix.install ".claude-plugin", ".agents"
   end
 
   def caveats
     <<~EOS
-      Codex: when ~/.codex is a directory or CODEX_HOME is nonempty, bare grove
-      installs and repairs all bundled compatible skills in ~/.agents/skills before
-      launching a session. No separate checkout or download is needed;
-      the skills update with the installed binary.
+      Skills: this keg holds Grove's skills, core and the five domain packs.
+      Each source is a private copy in #{libexec}/skill-sources.
+      A directory symlink in share/ravel/skills is its public alias.
+      Homebrew links each alias into Ravel's default
+      skill directory, $(brew --prefix)/share/ravel/skills. Ravel 2.0.0 and
+      later read that directory when ~/.config/ravel/settings.json names no
+      "sources", also when that file is absent. Ravel then delivers the
+      skills to each session, and no setting is necessary.
 
-      Claude Code: install the plugins and enable marketplace auto-update:
+      Ravel 1.x delivers no skill. While the unversioned ravel formula is
+      Ravel 1.x, select the keg-only ravel@2 for skill delivery, as shown
+      below. Run `ravel skills resolve` with Ravel 2 to see the sources that
+      a launch receives. Each originPath names the private copy.
 
-        /plugin marketplace add Linkuistics/grove
-        /plugin install grove@linkuistics
-        /plugin install linkuistics@linkuistics
-        /plugin install testanyware@linkuistics
+      Grove leaves any native skill installation unchanged, including one that
+      an earlier Grove wrote.
 
-        /plugin -> Marketplaces -> Enable auto-update
+      Hook adapters: Ravel delivers skills and installs no hook. Register the
+      always-on technical-communication hooks of this keg in each harness:
 
-      Gemini CLI and Pi: clone the repository and run its installer:
+        # Claude Code, once:
+        claude plugin marketplace add "$(brew --prefix)/opt/grove"
+        claude plugin install technical-communication-hooks@writing-hooks
+        # Claude Code, guardrail from the personal formula, once:
+        claude plugin marketplace add "$(brew --prefix)/opt/personal"
+        claude plugin install guardrail@personal
+        # Codex, after each installation or upgrade of Grove:
+        codex plugin marketplace add "$(brew --prefix)/opt/grove"
+        codex plugin add technical-communication@writing-hooks
+        # Pi, once:
+        ln -s "$(brew --prefix)/share/ravel/skills/writing/craft/technical-communication/harnesses/pi/technical-communication.ts" ~/.pi/agent/extensions/
 
-        git clone https://github.com/Linkuistics/grove
-        ./grove/plugins/install.sh
+      After the two Codex commands, run codex once and choose "Trust all
+      and continue" at its hook review. Codex runs no hook until you trust
+      it. It stores the versioned keg path, so after each upgrade repeat the
+      two commands and the review.
 
-      Grove launches sessions through the independent Ravel dependency.
-      Copy the readable sample and edit your owner policy before the first run:
+      Grove launches sessions through the independent Ravel dependency. Each
+      Ravel major reads its own configuration file. Copy the readable sample
+      for your Ravel and edit it before the first run:
 
         mkdir -p ~/.config/ravel
+        # Ravel 1.x reads policy.ts:
         cp #{libexec}/ravel-policy/sample/policy.ts ~/.config/ravel/policy.ts
+        # Ravel 2.x reads config.rhai, with SCHEMA_VERSION 4:
+        cp #{libexec}/ravel-policy/sample/config.rhai ~/.config/ravel/config.rhai
 
-      The sample launches codex with approvals off and full access. Copy only
-      into an absent policy; preserve an existing policy and its relative helpers.
-      Creator-aware examples live in #{libexec}/ravel-policy/examples;
-      keep the whole caller asset tree together when copying their imports.
+      The samples launch codex with approvals off and full access. Copy only
+      into an absent file. Preserve an existing configuration and its helpers.
+      Creator-aware examples live in #{libexec}/ravel-policy/examples:
+      the *.ts files for Ravel 1.x and the *.rhai files for Ravel 2.x.
+      Keep the whole caller asset tree together when you import them.
+
+      While the unversioned ravel formula is Ravel 1.x, Ravel 2 is the
+      keg-only ravel@2. It reads the skills of this keg with no settings.
+      Select it for one Grove invocation by putting its bin first on PATH:
+
+        brew install linkuistics/taps/ravel@2
+        PATH="$(brew --prefix ravel@2)/bin:$PATH" grove
+
+      When the unversioned ravel moves to Ravel 2.x, ravel@2 is deprecated
+      and receives no later release. The unversioned ravel then reads only
+      config.rhai. It refuses a HOME that holds only policy.ts with
+      config_format_retired and exit 3. Before that upgrade, copy the
+      config.rhai sample above, convert your routes and check a launch
+      through ravel@2. Keep policy.ts while any Ravel 1.x launch remains.
+
+      Upgrade Grove with Ravel: run brew upgrade with no formula name, or
+      upgrade Grove first. A lone brew upgrade ravel leaves an earlier
+      Grove, because Homebrew upgrades a dependent only when it and each
+      of its dependencies have a bottle. Grove has no bottle, and Ravel has
+      none either. Grove 22.8 and earlier refuse Ravel 2.x, and their
+      message names brew upgrade ravel. In that state, run
+      brew upgrade grove.
+
+      After the upgrade, Grove needs no PATH prefix, and each launch
+      receives the skills of this keg. To turn that delivery off, put an
+      empty sources list in the skills object of settings.json:
+
+        {"skills": {"schemaVersion": 1, "sources": []}}
+
+      Ravel 2.x refuses a top-level sources key as settings_invalid.
       Earlier config.kdl or .grove.kdl files are no longer read.
     EOS
   end
 
+  # Each installed Ravel that the test checks, with the runtime of its
+  # configuration: "1.1" reads policy.ts and the TypeScript assets, and "2.0"
+  # reads config.rhai and the Rhai assets. The dependency's version output
+  # names its runtime. The keg-only ravel@2 is checked too when the tap has it
+  # and it is installed. scripts/release-formula.test.rb passes explicit builds.
+  # https://docs.brew.sh/rubydoc/Formula.html#any_version_installed%3F-instance_method
+  def ravel_builds
+    ravel = Formula["linkuistics/taps/ravel"].opt_bin/"ravel"
+    builds = [[ravel, shell_output("#{ravel} --version").start_with?("ravel 2.") ? "2.0" : "1.1"]]
+    begin
+      versioned = Formula["linkuistics/taps/ravel@2"]
+      builds << [versioned.opt_bin/"ravel", "2.0"] if versioned.any_version_installed?
+    rescue FormulaUnavailableError
+      # A tap in state A, such as a test tap, has no ravel@2.
+    end
+    builds
+  end
+
   test do
-    assert_equal "grove 22.8.0\n", shell_output("#{bin}/grove --version")
-    assert_equal "grove-llm 22.8.0\n", shell_output("#{bin}/grove-llm --version")
-    ravel = Formula["ravel"].opt_bin/"ravel"
-    assert_match(/^ravel 1\./, shell_output("#{ravel} --version"))
+    assert_equal "grove 22.9.0\n", shell_output("#{bin}/grove --version")
+    assert_equal "grove-llm 22.9.0\n", shell_output("#{bin}/grove-llm --version")
     assets = libexec/"ravel-policy"
     %w[README.md grove.ts provenance.ts examples/grove-static.ts
        examples/grove-review.ts examples/review.ts sample/policy.ts
-       typecheck/static.ts typecheck/review.ts].each do |asset|
+       typecheck/static.ts typecheck/review.ts grove.rhai provenance.rhai
+       examples/grove-static.rhai examples/grove-review.rhai
+       examples/review.rhai examples/static.rhai sample/config.rhai].each do |asset|
       assert_path_exists assets/asset
     end
-    # Homebrew's test sandbox cannot nest Ravel's macOS confinement sandbox.
+    # Each source is a private directory, and its public alias is a relative
+    # directory symlink into this keg. "The keg layout" of
+    # docs/specs/codex-skill-provisioning.md.
+    SKILL_SOURCES.each do |id|
+      payload = libexec/"skill-sources"/id
+      assert_predicate payload, :directory?
+      refute_predicate payload, :symlink?
+      assert_predicate share/"ravel/skills"/id, :symlink?
+      assert_equal "../../../libexec/skill-sources/#{id}", (share/"ravel/skills"/id).readlink.to_s
+    end
+    # Homebrew runs this test inside its own sandbox.
     # https://raw.githubusercontent.com/Homebrew/brew/eb56e2b1f7/Library/Homebrew/dev-cmd/test.rb
-    # Exercise lifecycle here; release verification separately runs confined
-    # standalone publication through scripts/grove-installed-smoke.sh.
-    (testpath/"home/.config/ravel").mkpath
+    # Ravel confines nothing, so no nested sandbox meets it. Exercise the
+    # lifecycle here; release verification runs standalone publication through
+    # scripts/grove-installed-smoke.sh.
     (testpath/".jj/repo").mkpath
     (testpath/".grove").mkpath
     (testpath/".grove/_BRIEF.md").write "# fixture\n"
@@ -97,20 +208,79 @@ class Grove < Formula
       touch "$GROVE_LAUNCH_DIR/teardown"
       exec "$1" end-session grove-continue
     SH
-    (testpath/"home/.config/ravel/policy.ts").write <<~TS
-      import { definePolicy } from "ravel/sdk";
-      import { withProvenance } from "#{assets}/provenance.ts";
-      import { groveReviewSelector } from "#{assets}/examples/grove-review.ts";
-      const route = request => ({ program: "/bin/sh", args: [#{agent.to_s.to_json},
-        #{ravel.to_s.to_json}], provider: "fixture", model: "none", effort: "none" });
-      export const policy = withProvenance(definePolicy({ schemaVersion: 2,
-        version: "brew-test", ...groveReviewSelector({ routes: { impl: route }, reviews: {} }) }));
-    TS
-    ENV["HOME"] = (testpath/"home").to_s
-    ENV.delete("CODEX_HOME")
-    ENV["PATH"] = "#{Formula["ravel"].opt_bin}:/usr/bin:/bin"
-    assert_match "loop complete", shell_output("#{bin}/grove 2>&1")
-    assert_equal "launched", (testpath/"launched.txt").read
-    assert_path_exists leaf
+    ravel_builds.each_with_index do |(ravel, runtime), index|
+      # Each Ravel reads its own HOME, because the two majors refuse each
+      # other's settings keys. A Codex home is present, and startup still
+      # writes no skill installation.
+      home = testpath/"home-#{index}"
+      (home/".config/ravel").mkpath
+      (home/".codex").mkpath
+      if runtime == "1.1"
+        assert_match(/^ravel 1\./, shell_output("#{ravel} --version"))
+        (home/".config/ravel/policy.ts").write <<~TS
+          import { definePolicy } from "ravel/sdk";
+          import { withProvenance } from "#{assets}/provenance.ts";
+          import { groveReviewSelector } from "#{assets}/examples/grove-review.ts";
+          const route = request => ({ program: "/bin/sh", args: [#{agent.to_s.to_json},
+            #{ravel.to_s.to_json}], provider: "fixture", model: "none", effort: "none" });
+          export const policy = withProvenance(definePolicy({ schemaVersion: 2,
+            version: "brew-test", ...groveReviewSelector({ routes: { impl: route }, reviews: {} }) }));
+        TS
+      else
+        # A Rhai route is a closure, so a function of the script makes it.
+        (home/".config/ravel/config.rhai").write <<~RHAI
+          import #{(assets/"examples/grove-review").to_s.to_json} as grove_review;
+          import #{(assets/"provenance").to_s.to_json} as provenance;
+          export const SCHEMA_VERSION = 4;
+          export const VERSION = "brew-test";
+          fn route() {
+              |request| \#{ program: "/bin/sh", args: [#{agent.to_s.to_json}, #{ravel.to_s.to_json}],
+                  provider: "fixture", model: "none", effort: "none" }
+          }
+          const RULES = \#{ routes: \#{ impl: route() }, reviews: \#{} };
+          fn load_context(request) { grove_review::load_context_with(global::RULES, request) }
+          fn select(request, context) {
+              provenance::with_provenance(grove_review::select_with(global::RULES, request, context),
+                  global::VERSION, request)
+          }
+        RHAI
+      end
+      FileUtils.rm_f testpath/"launched.txt"
+      ENV["HOME"] = home.to_s
+      ENV.delete("CODEX_HOME")
+      ENV["PATH"] = "#{ravel.dirname}:/usr/bin:/bin"
+      assert_match "loop complete", shell_output("#{bin}/grove 2>&1")
+      assert_equal "launched", (testpath/"launched.txt").read
+      assert_path_exists leaf
+      refute_path_exists home/".agents"
+      assert_empty (home/".codex").children
+      next unless runtime == "2.0"
+
+      # A private copy of the 2.0 build, with an installation record that
+      # names this keg's public aliases, reads them with no settings. Ravel
+      # finds the record beside its canonical executable, and canonicalises
+      # each source, so each originPath is the private copy in this keg.
+      relocated = testpath/"relocated-#{index}"
+      (relocated/"bin").mkpath
+      (relocated/"share/ravel").mkpath
+      cp ravel, relocated/"bin/ravel"
+      chmod 0755, relocated/"bin/ravel"
+      skills = share/"ravel/skills"
+      (relocated/"share/ravel/installation.json").write(
+        "#{JSON.generate({ schemaVersion: 1, skillDirectory: skills.to_s })}\n",
+      )
+      resolve = ["/usr/bin/env", "-i", "PATH=/usr/bin:/bin", "HOME=#{home}", "TMPDIR=#{testpath}",
+                 (relocated/"bin/ravel").to_s, "skills", "resolve", "--json"]
+      resolved = JSON.parse(shell_output(resolve.shelljoin))
+      assert_equal "resolved", resolved["status"]
+      assert_equal SKILL_SOURCES, resolved["sources"].map { |source| source["id"] }
+      resolved["sources"].each do |source|
+        assert_equal (libexec/"skill-sources"/source["id"]).realpath.to_s, source["originPath"]
+        assert_match(/\A[0-9a-f]{64}\z/, source["resourceDigest"])
+      end
+    ensure
+      # Snapshots are read-only by design. Let Homebrew remove the test path.
+      chmod_R "u+w", home/".cache" if home && (home/".cache").exist?
+    end
   end
 end
