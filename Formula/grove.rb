@@ -4,24 +4,24 @@ require "shellwords"
 class Grove < Formula
   desc "Hierarchical, self-extending workstream tool for AI agents"
   homepage "https://github.com/Linkuistics/grove"
-  version "22.10.0"
+  version "22.11.0"
   license "Apache-2.0"
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.10.0/grove-v22.10.0-aarch64-apple-darwin.tar.xz"
-      sha256 "218661720ccf6989bd248510a04476c903d98be7d1fe28e9a74cf50ff7f0b6bf"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.11.0/grove-v22.11.0-aarch64-apple-darwin.tar.xz"
+      sha256 "e223c6e951d99a5a83feccac01b422c59cb26030214a77a99be0a2d0a356c479"
     end
   end
 
   on_linux do
     on_arm do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.10.0/grove-v22.10.0-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "5abf005408a89d6605b07251255fbd5a5424a916e381f3feb72c5218508757ca"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.11.0/grove-v22.11.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "c1acb705da145e2740f5e70689f34d0091812dc06e24487b18a311ded8f3bd07"
     end
     on_intel do
-      url "https://github.com/Linkuistics/grove/releases/download/v22.10.0/grove-v22.10.0-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "c2caf3f79395b3617b0e586738d719c0c6a45db272fd59633cda8817c4f7e36f"
+      url "https://github.com/Linkuistics/grove/releases/download/v22.11.0/grove-v22.11.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "9515ae81aa2b78f232c57b18cf7f8c431d25ad6c768463d663e849b5193a6ccf"
     end
   end
 
@@ -171,8 +171,8 @@ class Grove < Formula
   end
 
   test do
-    assert_equal "grove 22.10.0\n", shell_output("#{bin}/grove --version")
-    assert_equal "grove-llm 22.10.0\n", shell_output("#{bin}/grove-llm --version")
+    assert_equal "grove 22.11.0\n", shell_output("#{bin}/grove --version")
+    assert_equal "grove-llm 22.11.0\n", shell_output("#{bin}/grove-llm --version")
     assets = libexec/"ravel-policy"
     %w[README.md grove.ts provenance.ts examples/grove-static.ts
        examples/grove-review.ts examples/review.ts sample/policy.ts
