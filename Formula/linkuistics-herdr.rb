@@ -10,17 +10,55 @@ class LinkuisticsHerdr < Formula
   depends_on "rust" => :build
   depends_on "zig@0.16" => :build
 
-  # Keep this resource aligned with vendor/libghostty-vt/build.zig.zon.
-  # Zig's HTTP client fails against this host; Homebrew's curl download works.
+  # Keep these resources aligned with the vendored Zig package manifests,
+  # including translate-c's aro dependency. Homebrew's curl download avoids
+  # failures in Zig's HTTP client; Zig still checks each package content hash.
+  resource "translate-c" do
+    url "https://codeberg.org/vancluever/translate-c/archive/4e879eb8aba615de112eabd1231ea6e01920cead.tar.gz"
+    sha256 "8fb0f5c6a3e8b3bf0e35225d3abc1230bcf6f1fdf162467f1f747ec2fa5eda07"
+  end
+
   resource "uucode" do
     url "https://deps.files.ghostty.org/uucode-2826a37a4562284fdacd8fa029d49509cc9bffcd.tar.gz"
     sha256 "7e76fc7fab1e7ac728c52b35bbb3e5b8c639841abfc7fe1a4bcb13050594bc9e"
   end
 
+  resource "ghostty-themes" do
+    url "https://deps.files.ghostty.org/ghostty-themes-release-20260831-151010-752a9c0.tgz"
+    sha256 "83653eb837baeb5bfc7d50c91b7d44772796e08c1c243134e11c5edf6c8d15c5"
+  end
+
+  resource "highway" do
+    url "https://deps.files.ghostty.org/highway-66486a10623fa0d72fe91260f96c892e41aceb06.tar.gz"
+    sha256 "87d4f8893ef4e08f224973608ffebf94268a81380ba79c12e8841968c80aa212"
+  end
+
+  resource "zlib" do
+    url "https://deps.files.ghostty.org/zlib-1220fed0c74e1019b3ee29edae2051788b080cd96e90d56836eea857b0b966742efb.tar.gz"
+    sha256 "17e88863f3600672ab49182f217281b6fc4d3c762bde361935e436a95214d05c"
+  end
+
+  resource "wuffs" do
+    url "https://deps.files.ghostty.org/wuffs-7411f488fe2e2c205c3d3b3d28638b7356522930.tar.gz"
+    sha256 "17877d346f7988651d6c62e45b2e3b05c86809a6442c5e34612374b2a9719a1c"
+  end
+
+  resource "pixels" do
+    url "https://deps.files.ghostty.org/pixels-12207ff340169c7d40c570b4b6a97db614fe47e0d83b5801a932dcd44917424c8806.tar.gz"
+    sha256 "55e83b16d091082502bf149bf457f31f42092c5982650e3ffbae7b48871bf11a"
+  end
+
+  resource "aro" do
+    url "https://github.com/vancluever/arocc/archive/f97cdfc3779aec4b242299e2fc9a1c828c3547c6.tar.gz"
+    sha256 "42c8cab9135b12518e6af7dc5e461f055c78b863adca8ed7774f2fb7fe9a7784"
+  end
+
   def install
     ENV["ZIG"] = formula_opt_bin("zig@0.16")/"zig"
     cd "vendor/libghostty-vt" do
-      system ENV["ZIG"], "fetch", resource("uucode").cached_download
+      resources.each do |dependency|
+        system ENV["ZIG"], "fetch", dependency.cached_download
+      end
     end
     # herdr builds `--version` as {CARGO_PKG_VERSION}-{channel}.{build_id} from
     # these compile-time vars (src/build_info.rs). Without them `channel` falls
