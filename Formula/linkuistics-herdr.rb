@@ -10,8 +10,18 @@ class LinkuisticsHerdr < Formula
   depends_on "rust" => :build
   depends_on "zig@0.16" => :build
 
+  # Keep this resource aligned with vendor/libghostty-vt/build.zig.zon.
+  # Zig's HTTP client fails against this host; Homebrew's curl download works.
+  resource "uucode" do
+    url "https://deps.files.ghostty.org/uucode-2826a37a4562284fdacd8fa029d49509cc9bffcd.tar.gz"
+    sha256 "7e76fc7fab1e7ac728c52b35bbb3e5b8c639841abfc7fe1a4bcb13050594bc9e"
+  end
+
   def install
     ENV["ZIG"] = formula_opt_bin("zig@0.16")/"zig"
+    cd "vendor/libghostty-vt" do
+      system ENV["ZIG"], "fetch", resource("uucode").cached_download
+    end
     # herdr builds `--version` as {CARGO_PKG_VERSION}-{channel}.{build_id} from
     # these compile-time vars (src/build_info.rs). Without them `channel` falls
     # back to "stable" and the binary reports the upstream version, indistinguishable
