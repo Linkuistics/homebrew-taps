@@ -1,16 +1,13 @@
 class Testanyware < Formula
   desc "GUI testing tool for VMs, using tart, designed for LLM-driven testing"
   homepage "https://github.com/Linkuistics/TestAnyware"
-  version "2.8.0"
+  version "2.9.0"
   license "MIT"
-  # Revision 1 projects the skill source into the keg layout at the same release. The
-  # template of TestAnyware renders this layout and no revision, so its next release drops it.
-  revision 1
 
   on_macos do
     on_arm do
-      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.8.0/testanyware-v2.8.0-aarch64-apple-darwin.tar.xz"
-      sha256 "bda57d356222e6ef7eb7bc7be7c6c815cc890b9b0743ff7c1aa5b6130c285a30"
+      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.9.0/testanyware-v2.9.0-aarch64-apple-darwin.tar.xz"
+      sha256 "d9c03b56414e37e823d8581b8277c5a2f2c43b97994c6d451a7c09a571c83f27"
     end
   end
 
@@ -21,15 +18,15 @@ class Testanyware < Formula
     depends_on "python@3.12"
 
     on_arm do
-      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.8.0/testanyware-v2.8.0-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "1184d0701592575ecfe8d4114506af10d9da60c85020b9ce48bc78406c168524"
+      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.9.0/testanyware-v2.9.0-aarch64-unknown-linux-gnu.tar.xz"
+      sha256 "aacd97940005658460792867b68229f11f35c3baea1fde4ce0c7eb784673384d"
     end
     on_intel do
       # BUILD/LINK-VERIFIED ONLY: no native x86_64 guest verifies this at
       # runtime (ADR-0009 no-silent-caps). The OCR/record runtime path here is
       # unproven; aarch64-linux is the harness-green tier.
-      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.8.0/testanyware-v2.8.0-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "ad562f41b15056a899e944aa7250ffda51879678fdedd24edb49b0b3cb8b13f9"
+      url "https://github.com/Linkuistics/TestAnyware/releases/download/v2.9.0/testanyware-v2.9.0-x86_64-unknown-linux-gnu.tar.xz"
+      sha256 "61b22e92afd90b5822c0e22f12792965d941660b75dc7c8d171d87c03aa1f988"
     end
 
     # EasyOCR backs `screen find-text` on Linux. Pinned by sha256; pip resolves
